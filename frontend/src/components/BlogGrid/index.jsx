@@ -1,4 +1,5 @@
 import React from "react";
+import PropType from "prop-types";
 
 import BlogItem from "../BlogItem";
 
@@ -35,7 +36,6 @@ export default function BlogGrid({ blogPosts }) {
           {blogPosts.length > 2 && (
             <div className="item-3 h-50">
               <BlogItem index={2} blogPost={blogPosts[2]} />
-              <div>item 3</div>
             </div>
           )}
         </div>
@@ -48,3 +48,7 @@ export default function BlogGrid({ blogPosts }) {
     </>
   );
 }
+
+BlogGrid.prototype = {
+  blogPost: PropType.array.isRequired,
+};
