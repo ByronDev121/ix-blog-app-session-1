@@ -4,47 +4,73 @@ import Heading from "../../components/Heading";
 import BlogList from "../../components/BlogList";
 import Footer from "../../components/Footer";
 
+import { useParams, Link } from "react-router-dom";
+
 import "./index.css";
 
-const data = require("../../dummy-data.json");
-const blogsDummyData = data.blogPosts;
-const categoriesDummyData = data.categories;
+import blogService from "../../services/blogService";
+import categoryService from "../../services/categoryService";
 
 export default function BlogsPage() {
-  const [blogs, setBlogs] = useState(blogsDummyData);
-  const [categoryId, setCategoryId] = useState();
+  const { categoryId } = useParams();
 
-  const callbackFunction = () => {
-    if (categoryId) {
-      const filterBlogs = blogsDummyData.filter((blog) => {
-        return blog.categories.some((category) => category.id === categoryId);
-      });
-      setBlogs(filterBlogs);
-    }
-  };
-  useEffect(callbackFunction, [categoryId]);
+  const [blogs, setBlogs] = useState();
+  const [categories, setCategories] = useState();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const blogsRes = await blogService.getBlogsByCategoryId(categoryId);
+      const categoriesRes = await categoryService.getCategories();
+
+      setBlogs(blogsRes);
+      setCategories(categoriesRes);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [categoryId]);
 
   const CategoriesList = ({ categoryId }) => {
-    return categoriesDummyData.map((category) => {
+    if (!categories && !categories?.length) {
+      return null;
+    }
+
+    return categories.map((category) => {
       return categoryId === category.id ? (
-        <button
+        <Link
+          className="link"
           key={category.id}
-          onClick={() => setCategoryId(category.id)}
+          to={"/blogs/" + category.id}
           style={{ color: "blue" }}
+          onClick={() => setLoading(true)}
         >
           <p key={category.id}>{category.title}</p>
-        </button>
+        </Link>
       ) : (
-        <button
+        <Link
+          className="link"
           key={category.id}
-          onClick={() => setCategoryId(category.id)}
+          to={"/blogs/" + category.id}
           style={{ color: "black" }}
+          onClick={() => setLoading(true)}
         >
           <p key={category.id}>{category.title}</p>
-        </button>
+        </Link>
       );
     });
   };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
