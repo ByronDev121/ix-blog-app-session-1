@@ -1,15 +1,31 @@
-const createBlogs = (req, res) => {
+const Blog = require("../models/Blog");
+
+const createBlogs = async (req, res) => {
   console.log(req.body);
+
+  const blog = new Blog({
+    title: req.body.title,
+    description: req.body.description,
+    image: req.body.image,
+    content: req.body.content,
+    authorId: req.body.authorId,
+    categoryIds: req.body.categoryIds,
+  });
+
+  await blog.save();
+
   res.status(200).json({
     message: "Blog created!",
-    data: [],
+    data: blog,
   });
 };
 
-const getBlogs = (req, res) => {
+const getBlogs = async (req, res) => {
+  const blogs = await Blog.find();
+
   res.status(200).json({
     message: "Get all blogs!",
-    data: [],
+    data: blogs,
   });
 };
 

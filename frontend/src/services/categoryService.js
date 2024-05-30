@@ -13,7 +13,7 @@ const getCategories = async () => {
     console.log(categoryAPIData.message);
     return categoryAPIData.data;
   } catch (err) {
-    throw new Error(err);
+    // return err;
   }
 };
 

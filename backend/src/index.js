@@ -1,6 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const port = 8000;
+require("dotenv").config();
+
+const connectDB = require("./database/db");
+
+connectDB();
+
+const port = process.env.PORT || 8000;
 
 const blogsRoutes = require("./routes/blogs");
 
