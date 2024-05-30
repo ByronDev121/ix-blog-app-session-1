@@ -18,7 +18,7 @@ import ErrorToast from "../../components/ErrorToast";
 export default function BlogsPage() {
   const { categoryId } = useParams();
 
-  const [blogs, setBlogs] = useState();
+  const [blogs, setBlogs] = useState([]);
   const [addBlog, setAddBlog] = useState();
   const [categories, setCategories] = useState();
 
@@ -32,7 +32,6 @@ export default function BlogsPage() {
       setLoading(true);
       const blogsRes = await blogService.getBlogsByCategoryId(categoryId);
       const categoriesRes = await categoryService.getCategories();
-
       setBlogs(blogsRes);
       setCategories(categoriesRes);
       setLoading(false);
@@ -68,11 +67,18 @@ export default function BlogsPage() {
     try {
       const newBlog = await blogService.createBlog(blog);
       setIsSucces(true);
-      setMessage("Blog created successfully");
+      setMessage(newBlog.message);
+      setBlogs((prev) => {
+        if (newBlog.data.categories.some((x) => x.id === categoryId)) {
+          prev?.unshift(newBlog.data);
+        }
+        return prev;
+      });
     } catch (err) {
       setIsError(true);
-      setMessage(JSON.stringify(err));
+      setMessage(err);
     }
+    setAddBlog(null);
   };
 
   const CategoriesList = ({ categoryId }) => {

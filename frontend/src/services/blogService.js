@@ -1,17 +1,19 @@
 const createBlog = async (blog) => {
-  try {
-    const data = await fetch("http://localhost:8000/api/blog", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(blog),
-    });
-    const blogsApiData = await data.json();
-    return blogsApiData.data;
-  } catch (error) {
-    throw Error(error)
+  const response = await fetch("http://localhost:8000/api/blogs", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(blog),
+  });
+
+  if (!response.ok) {
+    let res = await response.json();
+    throw res.message || res;
   }
+
+  const blogsApiData = await response.json();
+  return blogsApiData;
 };
 
 const getBlogs = async () => {
