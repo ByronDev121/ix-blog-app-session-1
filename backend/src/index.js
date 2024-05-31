@@ -3,6 +3,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const blogsRoutes = require("./routes/blogs");
+const categoryRoutes = require("./routes/categories");
 
 const connectDB = require("./database/db");
 
@@ -16,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/blogs", blogsRoutes);
-app.use("/api/categories", blogsRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

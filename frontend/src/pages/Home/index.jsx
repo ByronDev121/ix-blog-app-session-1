@@ -17,10 +17,10 @@ export default function Home() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const blogsRes = await blogService.getBlogs();
-        const categoryRes = await categoryService.getCategories();
-        setBlogs(blogsRes);
-        setCategories(categoryRes);
+        const blogsRes = await blogService.fetchBlogs();
+        const categoryRes = await categoryService.fetchCategories();
+        setBlogs(blogsRes.data);
+        setCategories(categoryRes.data);
       } catch (err) {
         console.log(err);
       }

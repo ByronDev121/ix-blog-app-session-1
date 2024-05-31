@@ -14,11 +14,7 @@ export default function BlogGrid({ blogPosts }) {
       <div className="blog-grid-container py-2 w-100">
         <div className="item-1 w-50">
           {blogPosts.length > 0 && (
-            <BlogItem
-              imageOrientation={"top"}
-              index={0}
-              blogPost={blogPosts[0]}
-            />
+            <BlogItem imageOrientation={"top"} index={0} blog={blogPosts[0]} />
           )}
         </div>
 
@@ -28,21 +24,21 @@ export default function BlogGrid({ blogPosts }) {
               <BlogItem
                 imageOrientation={"left"}
                 index={1}
-                blogPost={blogPosts[1]}
+                blog={blogPosts[1]}
               />
             </div>
           )}
 
           {blogPosts.length > 2 && (
             <div className="item-3 h-50">
-              <BlogItem index={2} blogPost={blogPosts[2]} />
+              <BlogItem index={2} blog={blogPosts[2]} />
             </div>
           )}
         </div>
       </div>
       {blogPosts.length > 3 && (
         <div className="item-4">
-          <BlogItem index={3} blogPost={blogPosts[3]} />
+          <BlogItem index={3} blog={blogPosts[3]} />
         </div>
       )}
     </>

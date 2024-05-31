@@ -32,6 +32,15 @@ export default function Navbar() {
                 Blogs
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link active"
+                aria-current="page"
+                to="/categories"
+              >
+                Categories
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
