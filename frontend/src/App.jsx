@@ -11,6 +11,8 @@ import HomePage from "./pages/Home";
 import BlogsPage from "./pages/Blogs";
 import BlogPage from "./pages/Blog";
 import CategoriesPage from "./pages/Categories";
+import LoginPage from "./pages/Login";
+import RegisterPage from "./pages/Register";
 
 const routes = [
   {
@@ -32,6 +34,14 @@ const routes = [
   {
     path: "/categories",
     element: <CategoriesPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
 ];
 const router = createBrowserRouter(routes);
