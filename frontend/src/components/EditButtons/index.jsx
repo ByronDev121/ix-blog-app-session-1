@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EditButtons({ onEdit, onDelete }) {
+export default function EditButtons({ onEdit, onDelete, onNavigate }) {
   return (
     <>
       <button
@@ -31,6 +31,20 @@ export default function EditButtons({ onEdit, onDelete }) {
       >
         <i className="bi bi-trash-fill"></i>
       </button>
+      <button
+      style={{
+        position: "absolute",
+        top: "10px",
+        right: "10px",
+        border: "none",
+        zIndex: 1,
+      }}
+      type="button"
+      className="btn"
+      onClick={onNavigate}
+    >
+      <i className="bi bi-arrows-fullscreen"></i>
+    </button>
     </>
   );
 }

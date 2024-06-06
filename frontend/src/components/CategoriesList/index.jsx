@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import "./index.css";
 
@@ -7,6 +8,7 @@ import EditButtons from "../EditButtons";
 
 export default function CategoriesList({ categories, onEdit, onDelete }) {
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   if (!categories && !categories?.length) {
     return null;
@@ -21,7 +23,9 @@ export default function CategoriesList({ categories, onEdit, onDelete }) {
             className="card"
             style={{ borderRadius: "0px", border: "none", padding: 0 }}
             onClick={() => {
-              console.log("TODO: Navigate to categories page");
+              if ((!user && !user?.token) || (!onEdit && !onDelete)) {
+                navigate(`/blogs/${category.id}`);
+              }
             }}
           >
             <div
@@ -46,6 +50,9 @@ export default function CategoriesList({ categories, onEdit, onDelete }) {
                 }}
                 onDelete={() => {
                   onDelete(category);
+                }}
+                onNavigate={() => {
+                  navigate(`/blogs/${category.id}`);
                 }}
               />
             )}
