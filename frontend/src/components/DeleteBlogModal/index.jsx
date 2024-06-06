@@ -1,9 +1,18 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { Modal } from "bootstrap";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function DeleteBlogModal({ deleteBlog, removeBlog, onClose }) {
+import {
+  deleteBlogById,
+  resetSuccessAndError,
+  setDeleteBlog,
+} from "../../features/blogsSlice";
+
+export default function DeleteBlogModal() {
+  const dispatch = useDispatch();
   const [blog, setBlog] = useState();
+
+  const { deleteBlog } = useSelector((state) => state.blogs);
 
   const modalEl = document.getElementById("deleteBlogModal");
   const deleteBlogModal = useMemo(() => {
@@ -30,12 +39,12 @@ export default function DeleteBlogModal({ deleteBlog, removeBlog, onClose }) {
 
   const onCloseModal = () => {
     resetBlog();
-    onClose();
+    dispatch(setDeleteBlog(null));
     deleteBlogModal?.hide();
   };
 
   const onDelete = () => {
-    removeBlog(deleteBlog);
+    dispatch(deleteBlogById(blog?.id));
     resetBlog();
     deleteBlogModal?.hide();
   };
@@ -93,9 +102,3 @@ export default function DeleteBlogModal({ deleteBlog, removeBlog, onClose }) {
     </div>
   );
 }
-
-DeleteBlogModal.prototype = {
-  deleteBlog: PropTypes.object,
-  removeBlog: PropTypes.func,
-  onClose: PropTypes.func,
-};

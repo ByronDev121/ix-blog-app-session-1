@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import Navbar from "../../components/Navbar";
 import Heading from "../../components/Heading";
@@ -6,27 +7,55 @@ import SubHeading from "../../components/Subheading";
 import BlogGrid from "../../components/BlogGrid";
 import CategoriesList from "../../components/CategoriesList";
 import Footer from "../../components/Footer";
+import Loading from "../../components/Loading";
+import SuccessToast from "../../components/SuccessToast";
+import ErrorToast from "../../components/ErrorToast";
 
-import blogService from "../../services/blogService";
-import categoryService from "../../services/categoryService";
+import {
+  fetchBlogs,
+  resetSuccessAndError as resetBlogSuccessAndError,
+} from "../../features/blogsSlice";
+import {
+  fetchCategories,
+  resetSuccessAndError as resetCategoriesSuccessAndError,
+} from "../../features/categoriesSlice";
 
 export default function Home() {
-  const [blogs, setBlogs] = useState();
-  const [categories, setCategories] = useState();
+  const dispatch = useDispatch();
+
+  const {
+    blogs,
+    isError: isBlogsError,
+    isSuccess: isBlogsSuccess,
+    isLoading: isLoadingBlogs,
+    message: blogsMessage,
+  } = useSelector((state) => state.blogs);
+
+  const {
+    categories,
+    isError: isCategoriesError,
+    isSuccess: isCategoriesSuccess,
+    isLoading: isLoadingCategories,
+    message: categoriesMessage,
+  } = useSelector((state) => {
+    return state.categories;
+  });
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchData = async () => {
       try {
-        const blogsRes = await blogService.fetchBlogs();
-        const categoryRes = await categoryService.fetchCategories();
-        setBlogs(blogsRes.data);
-        setCategories(categoryRes.data);
+        dispatch(fetchBlogs());
+        dispatch(fetchCategories());
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
-    fetchBlogs();
+    fetchData();
   }, []);
+
+  if (isLoadingBlogs || isLoadingCategories) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -38,6 +67,22 @@ export default function Home() {
         <CategoriesList categories={categories} />
         <Footer />
       </div>
+      <SuccessToast
+        show={isBlogsSuccess || isCategoriesSuccess}
+        message={blogsMessage || categoriesMessage}
+        onClose={() => {
+          dispatch(resetBlogSuccessAndError());
+          dispatch(resetCategoriesSuccessAndError());
+        }}
+      />
+      <ErrorToast
+        show={isBlogsError || isCategoriesError}
+        message={blogsMessage || categoriesMessage}
+        onClose={() => {
+          dispatch(resetBlogSuccessAndError());
+          dispatch(resetCategoriesSuccessAndError());
+        }}
+      />
     </>
   );
 }
