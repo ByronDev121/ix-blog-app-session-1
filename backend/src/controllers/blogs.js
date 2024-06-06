@@ -83,6 +83,27 @@ const getBlogsByCategoryID = async (req, res) => {
   }
 };
 
+const getBlogsByAuthorID = async (req, res) => {
+  try {
+    console.log(req.params.id);
+    let filter = {};
+    if (req.params.id != "null" && req.params.id != "undefined") {
+      filter = { authorId: req.params.id };
+    }
+    const blogs = await Blog.find(filter)
+      .populate({
+        path: "categoryIds",
+      })
+      .populate({ path: "authorId" });
+    res.status(200).json({
+      message: "Get blogs by authorID!",
+      data: blogs,
+    });
+  } catch (err) {
+    res.status(500).json({ message: error.message, data: {} });
+  }
+};
+
 const updateBlogByID = async (req, res) => {
   console.log(req.body);
   try {
@@ -130,6 +151,7 @@ const blogController = {
   getBlogs,
   getBlogById,
   getBlogsByCategoryID,
+  getBlogsByAuthorID,
   updateBlogByID,
   deleteBlogByID,
 };
