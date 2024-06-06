@@ -73,7 +73,7 @@ export default function BlogsPage() {
       return null;
     }
     return (
-      <button className="btn btn-outline-dark" onClick={onBlogAdd}>
+      <button className="btn btn-outline-dark m-3" onClick={onBlogAdd}>
         ADD BLOG
       </button>
     );
