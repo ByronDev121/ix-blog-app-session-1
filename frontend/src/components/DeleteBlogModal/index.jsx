@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   deleteBlogById,
-  resetSuccessAndError,
   setDeleteBlog,
 } from "../../features/blogsSlice";
 

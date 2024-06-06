@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Toast } from "bootstrap";
+import PropTypes from "prop-types";
 
 export default function SuccessToast({ show, message, onClose }) {
   let [successToast, setSuccessToast] = useState(null);
@@ -44,3 +45,9 @@ export default function SuccessToast({ show, message, onClose }) {
     </div>
   );
 }
+
+SuccessToast.propTypes = {
+  show: PropTypes.bool.isRequired,
+  message: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};

@@ -6,13 +6,12 @@ import BlogItem from "../BlogItem";
 
 import "./index.css";
 
-// State
 import { setEditBlog, setDeleteBlog } from "../../features/blogsSlice";
 
-export default function BlogList({ blogPosts }) {
+export default function BlogList({ blogs }) {
   const dispatch = useDispatch();
 
-  if (!blogPosts && !blogPosts?.length) {
+  if (!blogs && !blogs?.length) {
     return null;
   }
 
@@ -24,10 +23,9 @@ export default function BlogList({ blogPosts }) {
     dispatch(setDeleteBlog(blog));
   };
 
-  // TODO: Styling
   return (
     <div className="blog-list">
-      {blogPosts.map((blog, index) => {
+      {blogs.map((blog, index) => {
         return (
           <BlogItem
             key={index}
@@ -44,5 +42,5 @@ export default function BlogList({ blogPosts }) {
 }
 
 BlogList.prototype = {
-  blogPosts: PropTypes.array.isRequired,
+  blogs: PropTypes.array.isRequired,
 };

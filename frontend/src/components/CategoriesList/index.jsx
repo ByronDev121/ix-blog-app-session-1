@@ -19,7 +19,7 @@ export default function CategoriesList({ categories, onEdit, onDelete }) {
           <button
             key={category.id}
             className="card"
-            style={{ borderRadius: "0px", border: "none" }}
+            style={{ borderRadius: "0px", border: "none", padding: 0 }}
             onClick={() => {
               console.log("TODO: Navigate to categories page");
             }}
@@ -58,4 +58,6 @@ export default function CategoriesList({ categories, onEdit, onDelete }) {
 
 CategoriesList.prototype = {
   categories: PropTypes.array.isRequired,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
 };

@@ -14,7 +14,6 @@ import DeleteBlogModal from "../../components/DeleteBlogModal";
 
 import "./index.css";
 
-// State
 import {
   setAddBlog,
   fetchBlogsByCategoryId,
@@ -69,11 +68,21 @@ export default function BlogsPage() {
     );
   };
 
+  const AddButton = () => {
+    if (!user || !user?.token) {
+      return null;
+    }
+    return (
+      <button className="btn btn-outline-dark" onClick={onBlogAdd}>
+        ADD BLOG
+      </button>
+    );
+  };
+
   const CategoriesList = ({ categoryId }) => {
     if (!categories && !categories?.length) {
       return null;
     }
-
     return categories.map((category) => {
       return categoryId === category.id ? (
         <Link
@@ -111,15 +120,12 @@ export default function BlogsPage() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <p className="page-subtitle">Blog Posts</p>
-          <button className="btn btn-outline-dark h-75" onClick={onBlogAdd}>
-            ADD BLOG
-          </button>
+          <AddButton />
         </div>
-        <BlogList blogPosts={blogs} />
+        <BlogList blogs={blogs} />
         <AddEditBlogModal />
         <DeleteBlogModal />
       </div>
-
       <Footer />
       <SuccessToast
         show={isBlogSuccess || isCategoriesSuccess}
@@ -129,7 +135,6 @@ export default function BlogsPage() {
           dispatch(resetCategory());
         }}
       />
-
       <ErrorToast
         show={isBlogsError || isCategoriesError}
         message={blogsMessage || categoriesMessage}
