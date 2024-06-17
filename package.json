@@ -2,10 +2,10 @@
   "name": "ix-blog-app",
   "version": "1.0.0",
   "description": "This is the backend server for my awesome blog app",
-  "main": "./src/index.js",
+  "main": "./backend/src/index.js",
   "scripts": {
-    "dev": "nodemon ./src/index.js",
-    "start": "node ./src/index.js",
+    "dev": "nodemon ./backend/src/index.js",
+    "start": "node ./backend/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Byron de Villiers",
