@@ -2,7 +2,7 @@ const { Storage } = require("@google-cloud/storage");
 
 const storage = new Storage({
   projectId: "devit-tech-web-site",
-  keyFilename: "./devit-tech-web-site-4f392cb2c8b3.json",
+  keyFilename: "./gcp_key.json",
 });
 
 const uploadToFirebaseStorage = async (filepath, fileName) => {
