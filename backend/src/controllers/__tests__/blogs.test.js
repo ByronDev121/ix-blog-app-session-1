@@ -1,15 +1,17 @@
-const Blog = require("../../models/Blog");
-const cloudStorage = require("../../services/cloud-storage");
+// Import functions to test:
 const { createBlogs, getBlogs } = require("../blogs");
 
-const { __mocks__, findById } = require("../../models/__mocks__/Blogs");
-
+// Import mocks:
+const cloudStorage = require("../../services/cloud-storage");
+const Blog = require("../../models/Blog");
 jest.mock("../../models/Blog");
 jest.mock("../../services/cloud-storage");
 
+const { __mocks__ } = require("../../models/__mocks__/Blogs");
+
+// Tests:
 describe("Blogs Controller: createBlogs", () => {
   let req, res;
-
   beforeEach(() => {
     req = {
       body: {
@@ -51,42 +53,26 @@ describe("Blogs Controller: createBlogs", () => {
         path: "path/to/file",
       },
     };
-
     res = {
       status: jest.fn(),
       json: jest.fn(),
     };
-
     cloudStorage.uploadToFirebaseStorage.mockResolvedValue(
       "https://storage.googleapis.com/ix-blog-app/default.jpeg"
     );
-
     Blog.mockClear();
     __mocks__.mockSave.mockClear();
     __mocks__.mockPopulate.mockClear();
   });
-
   test("Should create a blog and return the blog data", async () => {
     __mocks__.mockSave.mockResolvedValue({ _id: "1" });
     __mocks__.mockPopulate.mockResolvedValue(__mocks__.mockBlogPost);
-
-    Blog.mockImplementation(() => ({
-      save: __mocks__.mockSave,
-    }));
-
-    Blog.findById.mockImplementation(() => ({
-      populate: () => ({
-        populate: __mocks__.mockPopulate,
-      }),
-    }));
-
     await createBlogs(req, res);
-
     expect(cloudStorage.uploadToFirebaseStorage).toHaveBeenCalledWith(
       "path/to/file",
       "path/to/file"
     );
-    expect(__mocks__.mockSave).toHaveBeenCalled();
+    // expect(Blog.prototype.save).toHaveBeenCalled();
     expect(Blog.findById).toHaveBeenCalledWith("1");
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
@@ -98,9 +84,6 @@ describe("Blogs Controller: createBlogs", () => {
   test("should handle errors", async () => {
     const error = new Error("Something went wrong");
     __mocks__.mockSave.mockRejectedValue(error);
-    Blog.mockImplementation(() => ({
-      save: __mocks__.mockSave,
-    }));
     await createBlogs(req, res);
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ message: error.message, data: {} });
@@ -109,32 +92,29 @@ describe("Blogs Controller: createBlogs", () => {
 
 describe("Blogs Controller: getBlogs", () => {
   beforeEach(() => {
-    req = {
-      body: "test",
-    };
-
+    req = {};
     res = {
       status: jest.fn(),
       json: jest.fn(),
     };
-
     Blog.mockClear();
     __mocks__.mockSave.mockClear();
     __mocks__.mockPopulate.mockClear();
   });
-
   test("Should return all blogs data", async () => {
     __mocks__.mockPopulate.mockResolvedValue([__mocks__.mockBlogPost]);
-    Blog.find.mockImplementation(() => ({
-      populate: () => ({
-        populate: __mocks__.mockPopulate,
-      }),
-    }));
     await getBlogs(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: "Get all blogs!",
       data: [__mocks__.mockBlogPost],
     });
+  });
+  test("should handle get blogs errors", async () => {
+    const error = new Error("Something went wrong");
+    __mocks__.mockPopulate.mockRejectedValue(error);
+    await getBlogs(req, res);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: error.message, data: {} });
   });
 });

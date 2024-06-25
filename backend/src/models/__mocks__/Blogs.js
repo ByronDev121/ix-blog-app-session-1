@@ -1,3 +1,27 @@
+const Blog = require("../Blog");
+
+// This is called by default in __mocks__
+// jest.mock("../Blog");
+
+const mockSave = jest.fn();
+const mockPopulate = jest.fn();
+
+Blog.mockImplementation(() => ({
+  save: mockSave,
+}));
+
+Blog.find.mockImplementation(() => ({
+  populate: () => ({
+    populate: mockPopulate,
+  }),
+}));
+
+Blog.findById.mockImplementation(() => ({
+  populate: () => ({
+    populate: mockPopulate,
+  }),
+}));
+
 const mockBlogPost = {
   _id: "1",
   title: "My First Blog Post - Jest Unit Test",
@@ -35,25 +59,6 @@ const mockBlogPost = {
   ],
   image: "https://storage.googleapis.com/ix-blog-app/default.jpeg",
 };
-
-const mockSave = jest.fn();
-const mockPopulate = jest.fn();
-
-const Blog = jest.fn(() => ({
-  save: mockSave,
-}));
-
-Blog.find = jest.fn(() => ({
-  populate: jest.fn(() => ({
-    populate: mockPopulate,
-  })),
-}));
-
-Blog.findById = jest.fn(() => ({
-  populate: jest.fn(() => ({
-    populate: mockPopulate,
-  })),
-}));
 
 module.exports = Blog;
 module.exports.__mocks__ = {
