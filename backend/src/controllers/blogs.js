@@ -21,19 +21,17 @@ const createBlogs = async (req, res) => {
       categoryIds: categoryIds,
     });
     const newBlog = await blog.save();
-    const blogRes = await Blog.findById(newBlog._id);
-    Blog.populate({
-      path: "categoryIds",
-    });
-    Blog.populate({ path: "authorId" });
-
+    const blogRes = await Blog.findById(newBlog._id)
+      .populate({
+        path: "categoryIds",
+      })
+      .populate({ path: "authorId" });
     res.status(201);
     res.json({
       message: "Blog created!",
       data: blogRes,
     });
   } catch (err) {
-    console.log(err);
     res.status(500);
     res.json({ message: err.message, data: {} });
   }
@@ -44,13 +42,14 @@ const getBlogs = async (req, res) => {
     const blogs = await Blog.find()
       .populate({ path: "categoryIds" })
       .populate({ path: "authorId" });
-    res.status(200).json({
+    res.status(200);
+    res.json({
       message: "Get all blogs!",
       data: blogs,
     });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message, data: {} });
+    res.status(500);
+    res.json({ message: err.message, data: {} });
   }
 };
 
@@ -68,7 +67,6 @@ const getBlogById = async (req, res) => {
       res.status(404).json({ message: "Blog not found!", data: {} });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message, data: {} });
   }
 };
@@ -90,7 +88,6 @@ const getBlogsByCategoryID = async (req, res) => {
       data: blogs,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message, data: {} });
   }
 };
@@ -112,7 +109,6 @@ const getBlogsByAuthorID = async (req, res) => {
       data: blogs,
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message, data: {} });
   }
 };
@@ -150,7 +146,6 @@ const updateBlogByID = async (req, res) => {
       res.status(404).json({ message: "Blog not found!", data: [] });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: err.message, data: {} });
   }
 };
@@ -166,7 +161,6 @@ const deleteBlogByID = async (req, res) => {
       return res.status(404).json({ message: "Blog not found!" });
     }
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ message: err.message });
   }
 };
