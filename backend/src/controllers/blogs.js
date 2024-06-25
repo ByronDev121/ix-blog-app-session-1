@@ -1,17 +1,18 @@
 const Blog = require("../models/Blog");
 
-const { uploadToFirebaseStorage } = require("../cloud-storage");
+const cloudStorage = require("../services/cloud-storage");
 
 const createBlogs = async (req, res) => {
   try {
     let imageURL = "";
     if (req?.file?.path) {
-      imageURL = await uploadToFirebaseStorage(
+      imageURL = await cloudStorage.uploadToFirebaseStorage(
         req?.file?.path,
         req?.file?.path
       );
     }
-    console.log(req.body);
+
+    console.log(JSON.parse(req?.body?.categories));
     const categoryIds = JSON.parse(req?.body?.categories).map((x) => x.id);
     const blog = new Blog({
       title: req.body.title,
@@ -21,21 +22,24 @@ const createBlogs = async (req, res) => {
       authorId: req.body.authorId,
       categoryIds: categoryIds,
     });
-
+    console.log("got here 2");
     const newBlog = await blog.save();
+    console.log(newBlog);
+    const blogRes = await Blog.findById(newBlog._id);
+    Blog.populate({
+      path: "categoryIds",
+    });
+    Blog.populate({ path: "authorId" });
 
-    const blogRes = await Blog.findById(newBlog._id)
-      .populate({
-        path: "categoryIds",
-      })
-      .populate({ path: "authorId" });
-
-    res.status(201).json({
+    res.status(201);
+    res.json({
       message: "Blog created!",
       data: blogRes,
     });
   } catch (err) {
-    res.status(500).json({ message: err.message, data: {} });
+    console.log(err);
+    res.status(500);
+    res.json({ message: err.message, data: {} });
   }
 };
 
